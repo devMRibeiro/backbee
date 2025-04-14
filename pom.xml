@@ -5,4 +5,25 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>BackBee</name>
   <description>A automatic software backup</description>
+  
+  <dependencies>
+  	<dependency>
+		<groupId>org.postgresql</groupId>
+		<artifactId>postgresql</artifactId>
+		<version>42.6.0</version>
+	</dependency>
+	
+	<dependency>
+    	<groupId>com.github.devMRibeiro</groupId>
+    	<artifactId>db-connection-manager</artifactId>
+    	<version>v1.1.0</version>
+	</dependency>
+  </dependencies>
+  
+  <repositories>
+	<repository>
+    	<id>jitpack.io</id>
+    	<url>https://jitpack.io</url>
+  	</repository>
+  </repositories>
 </project>
