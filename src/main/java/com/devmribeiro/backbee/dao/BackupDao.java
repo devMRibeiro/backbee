@@ -1,12 +1,10 @@
 package com.devmribeiro.backbee.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import com.db.utility.ConnFactory;
 import com.devmribeiro.backbee.model.BackupModel;
@@ -22,8 +20,19 @@ public class BackupDao {
 
 			conn = ConnFactory.open();
 
-			ps = conn.prepareStatement("select * from backup where backup_created_date = ?");
-			ps.setDate(1, Date.valueOf(backupDate));
+			ps = conn.prepareStatement(
+					"select " +
+					"	backup_id, " +
+					"	backup_created_date " +
+					" from " +
+					"	backup " +
+					" where " + 
+					"	backup_created_date >= date_trunc('month', ?)::date and " +
+					"	backup_created_date <= (date_trunc('month', ?) + interval '1 month' - interval '1 day')::date");
+
+			ps.setObject(1, backupDate);
+			ps.setObject(2, backupDate);
+
 			System.out.println(ps);
 		
 			rs = ps.executeQuery();
@@ -31,7 +40,7 @@ public class BackupDao {
 			if (rs.next()) {
 				BackupModel backup = new BackupModel();
 				backup.setBackupId(rs.getInt("backup_id"));
-				backup.setBackupCreatedDate((LocalDateTime) rs.getObject("backup_created_date"));
+				backup.setBackupCreatedDate(rs.getTimestamp("backup_created_date").toLocalDateTime());
 				return backup;
 			}
 		} catch (Exception e) {
