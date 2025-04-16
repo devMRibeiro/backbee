@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.db.utility.ConnFactory;
 import com.devmribeiro.backbee.model.BackupModel;
@@ -38,10 +39,10 @@ public class BackupDao {
 			rs = ps.executeQuery();
 			
 			if (rs.next()) {
-				BackupModel backup = new BackupModel();
-				backup.setBackupId(rs.getInt("backup_id"));
-				backup.setBackupCreatedDate(rs.getTimestamp("backup_created_date").toLocalDateTime());
-				return backup;
+				BackupModel backupDTO;
+				
+				backupDTO = new BackupModel(rs.getInt("backup_id"), rs.getTimestamp("backup_created_date").toLocalDateTime());
+				return backupDTO;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,7 +52,7 @@ public class BackupDao {
 		return null;
 	}
 	
-	public static boolean insert(BackupModel backup) {
+	public static boolean insert(LocalDateTime dateTime) {
 		
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -60,7 +61,7 @@ public class BackupDao {
 			
 			conn = ConnFactory.open();
 			ps = conn.prepareStatement("insert into backup (backup_created_date) values (?)");
-			ps.setTimestamp(1, Timestamp.valueOf(backup.getBackupCreatedDate()));
+			ps.setTimestamp(1, Timestamp.valueOf(dateTime));
 			System.out.println(ps);
 			
 			if (ps.executeUpdate() > 0) {
