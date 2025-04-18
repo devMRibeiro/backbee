@@ -29,7 +29,7 @@ public class BackupDao {
 					"	backup " +
 					" where " + 
 					"	backup_created_date >= date_trunc('month', ?)::date and " +
-					"	backup_created_date <= (date_trunc('month', ?) + interval '1 month' - interval '1 day')::date");
+					"	backup_created_date < (date_trunc('month', ?) + interval '1 month')::date");
 
 			ps.setObject(1, backupDate);
 			ps.setObject(2, backupDate);
@@ -38,12 +38,10 @@ public class BackupDao {
 		
 			rs = ps.executeQuery();
 			
-			if (rs.next()) {
-				BackupModel backupDTO;
-				
-				backupDTO = new BackupModel(rs.getInt("backup_id"), rs.getTimestamp("backup_created_date").toLocalDateTime());
-				return backupDTO;
-			}
+			return rs.next()
+					? new BackupModel(rs.getInt("backup_id"), rs.getTimestamp("backup_created_date").toLocalDateTime())
+					: null;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
