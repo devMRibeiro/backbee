@@ -4,37 +4,31 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 import com.devmribeiro.backbee.dao.BackupDao;
-import com.devmribeiro.backbee.model.BackupModel;
 
 public class BackupService {
 
-	private LocalDateTime dateTimeFilter = null;
-
 	public void backup() {
 
-		dateTimeFilter = LocalDateTime.now();
+		LocalDateTime dateTimeFilter = LocalDateTime.now();
 
-		BackupModel backup;
-
-		backup = BackupDao.get(dateTimeFilter.toLocalDate());
-
-		if (backup != null) {
+		if (BackupDao.get(dateTimeFilter.toLocalDate()) != null) {
 			System.out.println("Backup already done");
 			return;
 		}
 
 		File source = new File("C:/Users/Michael Ribeiro/Teste1");
-		File destination = new File("C:/Users/Michael Ribeiro/Teste1 - Backup");
+		File target = new File("C:/Users/Michael Ribeiro/Backups/backup_" + YearMonth.now().toString().replace("-", "_"));
 
-		copy(source, destination);
+		removeOldBackup(target);
 		
-		if (copy(source, destination))
+		if (copy(source, target))
 			BackupDao.insert(dateTimeFilter);
 	}
 
-	private static boolean copy(File source, File target) {
+	private boolean copy(File source, File target) {
 
 		if (source.isDirectory()) {
 
@@ -60,6 +54,32 @@ public class BackupService {
 			}
 			return false;
 		}
+	}
+
+	private void removeOldBackup(File target) {
+		File backupDir = target.getParentFile();
+
+		String oldBackupName = "backup_" + YearMonth.now().minusMonths(3).toString().replace("-", "_");
+
+		File[] backups = backupDir.listFiles();
+
+		if (backups == null) return;
+
+		for (int i = 0; i < backups.length; i++) {
+			File dir = backups[i];
+			if (dir.getName().equals(oldBackupName))
+				deleteFolder(dir);
+		}
+	}
+
+	private void deleteFolder(File dir) {
+		if (dir.isDirectory()) {
+			File[] children = dir.listFiles();
+			if (children != null)
+				for (int i = 0; i < children.length; i++)
+					deleteFolder(children[i]);
+		}
+		dir.delete();
 	}
 
 	public static void main(String[] args) {
