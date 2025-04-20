@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.db.utility.ConnFactory;
+import com.db.utility.ResUtil;
 import com.devmribeiro.backbee.model.BackupModel;
 
 public class BackupDao {
@@ -19,7 +19,7 @@ public class BackupDao {
 
 		try {
 
-			conn = ConnFactory.open();
+			conn = ResUtil.open();
 
 			ps = conn.prepareStatement(
 					"select " +
@@ -45,7 +45,7 @@ public class BackupDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			ConnFactory.close(rs, ps, conn);
+			ResUtil.close(rs, ps, conn);
 		}
 		return null;
 	}
@@ -57,7 +57,7 @@ public class BackupDao {
 		
 		try {
 			
-			conn = ConnFactory.open();
+			conn = ResUtil.open();
 			ps = conn.prepareStatement("insert into backup (backup_created_date) values (?)");
 			ps.setTimestamp(1, Timestamp.valueOf(dateTime));
 			System.out.println(ps);
@@ -69,7 +69,7 @@ public class BackupDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			ConnFactory.close(ps, conn);
+			ResUtil.close(ps, conn);
 		}
 		return false;
 	}

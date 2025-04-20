@@ -10,6 +10,11 @@ import com.devmribeiro.backbee.dao.BackupDao;
 
 public class BackupService {
 
+	private static final String USER_HOME = System.getProperty("user.home");
+	private static final String[] FOLDER_TO_BACKUP = {
+		"Desktop", "Documents", "Downloads", "Images", "Videos"
+	};
+	
 	public void backup() {
 
 		LocalDateTime dateTimeFilter = LocalDateTime.now();
@@ -19,12 +24,22 @@ public class BackupService {
 			return;
 		}
 
-		File source = new File("C:/Users/Michael Ribeiro/Teste1");
-		File target = new File("C:/Users/Michael Ribeiro/Backups/backup_" + YearMonth.now().toString().replace("-", "_"));
+		File backupTarget = new File("C:/Users/Michael Ribeiro/Backups/backup_" + YearMonth.now().toString().replace("-", "_"));
+		removeOldBackup(backupTarget);
 
-		removeOldBackup(target);
-		
-		if (copy(source, target))
+		boolean isSuccess = true;
+		for (String folder : FOLDER_TO_BACKUP) {
+			File source = new File(USER_HOME, folder);
+			File target = new File(backupTarget, folder);
+			
+			if (!source.exists())
+				continue;
+			
+			if (!copy(source, target))
+				isSuccess = false;
+		}
+
+		if (isSuccess)
 			BackupDao.insert(dateTimeFilter);
 	}
 
