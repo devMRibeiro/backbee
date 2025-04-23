@@ -16,7 +16,13 @@
 	<dependency>
     	<groupId>com.github.devMRibeiro</groupId>
     	<artifactId>db-connection-manager</artifactId>
-    	<version>v1.4.0</version>
+    	<version>v1.5.0</version>
+	</dependency>
+	
+	<dependency>
+    	<groupId>com.github.devmribeiro</groupId>
+    	<artifactId>zen-log</artifactId>
+    	<version>v1.1.2</version>
 	</dependency>
   </dependencies>
   
