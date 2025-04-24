@@ -14,6 +14,8 @@ public class Copy extends SimpleFileVisitor<Path> {
 
 	private static final Logger log = new Logger(Copy.class);
 
+	private long count = 0l;
+
     private Path sourceDir;
     private Path targetDir;
 
@@ -28,6 +30,7 @@ public class Copy extends SimpleFileVisitor<Path> {
             Path targetFile = targetDir.resolve(sourceDir.relativize(file));
             Files.copy(file, targetFile, LinkOption.NOFOLLOW_LINKS);
             log.d("copying -> " + file);
+            count += 1;
         } catch (IOException ex) {
             log.e("Error copying" + ex);
         }
@@ -49,5 +52,9 @@ public class Copy extends SimpleFileVisitor<Path> {
             log.e("Error creating directory" + ex);
         }
         return FileVisitResult.CONTINUE;
+    }
+
+    public long getCount() {
+    	return count;
     }
 }
