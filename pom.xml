@@ -20,9 +20,9 @@
 	</dependency>
 	
 	<dependency>
-    	<groupId>com.github.devmribeiro</groupId>
-    	<artifactId>zen-log</artifactId>
-    	<version>v1.1.2</version>
+	    <groupId>com.github.devMRibeiro</groupId>
+	    <artifactId>zen-log</artifactId>
+	    <version>v2.1.9</version>
 	</dependency>
   </dependencies>
   

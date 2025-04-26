@@ -140,8 +140,4 @@ public class BackupService {
 		}
 		dir.delete();
 	}
-
-	public static void main(String[] args) {
-		new BackupService().backup();
-	}
 }
