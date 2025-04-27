@@ -12,7 +12,7 @@ import com.github.devmribeiro.zenlog.impl.Logger;
 
 public class Copy extends SimpleFileVisitor<Path> {
 
-	private static final Logger log = new Logger(Copy.class);
+	private static final Logger log = Logger.getLogger(Copy.class);
 
 	private long count = 0l;
 
@@ -29,7 +29,7 @@ public class Copy extends SimpleFileVisitor<Path> {
         try {
             Path targetFile = targetDir.resolve(sourceDir.relativize(file));
             Files.copy(file, targetFile, LinkOption.NOFOLLOW_LINKS);
-            log.d("copying -> " + file);
+            log.i("copying -> " + file);
             count += 1;
         } catch (IOException ex) {
             log.e("Error copying" + ex);

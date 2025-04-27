@@ -13,7 +13,7 @@ import com.github.devmribeiro.zenlog.impl.Logger;
 
 public class BackupDao {
 	
-	private static final Logger log = new Logger(BackupDao.class);
+	private static final Logger log = Logger.getLogger(BackupDao.class);
 	
 	public static BackupModel get(LocalDate backupDate) {
 

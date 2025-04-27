@@ -14,7 +14,7 @@ import com.github.devmribeiro.zenlog.impl.Logger;
 
 public class BackupService {
 
-	private static final Logger log = new Logger(BackupService.class);
+	private static final Logger log = Logger.getLogger(BackupService.class);
 	private static final String USER_HOME = System.getProperty("user.home");
 	private static final String[] FOLDER_TO_BACKUP = {
 		"Desktop", "Documents", "Downloads", "Pictures", "Videos"
@@ -66,11 +66,11 @@ public class BackupService {
 
 	private boolean copy(Path source, Path target) {
 		try {
-			log.d("---------------------------" + source + "---------------------------");
+			log.i("---------------------------" + source + "---------------------------");
 			Copy copy = new Copy(source, target);
 			Files.walkFileTree(source, copy);
 			count = copy.getCount();
-			log.d("---------------------------------END-PARENT---------------------------------");
+			log.i("---------------------------------END-PARENT---------------------------------");
         	return true;
 
         } catch (FileAlreadyExistsException ex) {
@@ -80,40 +80,6 @@ public class BackupService {
         }
 		return false;
 	}
-
-//	private boolean copy(File source, File target) {
-//		if (source.isDirectory()) {
-//
-//			if (!target.exists())
-//				target.mkdirs();
-//
-//			log.d("Copying directory: " + source.getAbsolutePath());
-//			
-//			String files[] = source.list();
-//
-//			if (files == null) {
-//				log.e("Failed to list files from: " + source.getAbsolutePath());
-//	            return false;
-//	        }
-//
-//			for (String file : files) {
-//				File srcFile = new File(source, file);
-//				File destFile = new File(target, file);
-//
-//				if (!copy(srcFile, destFile))
-//					return false;
-//			}
-//			return true;
-//		} else {
-//			try {
-//				Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
-//				return true;
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//			return false;
-//		}
-//	}
 
 	private void removeOldBackup(File target) {
 		File backupDir = target.getParentFile();

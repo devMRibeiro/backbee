@@ -22,7 +22,7 @@
 	<dependency>
 	    <groupId>com.github.devMRibeiro</groupId>
 	    <artifactId>zen-log</artifactId>
-	    <version>v2.1.9</version>
+	    <version>v2.3.2</version>
 	</dependency>
   </dependencies>
   
