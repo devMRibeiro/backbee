@@ -57,10 +57,10 @@ Or, if you have already generated the `.exe` with Launch4j, just run the `.exe` 
 [] Perform 2 backups monthly.
 [] Automatic compression of backups (ZIP).
 [] Create a user-friendly interface for configuring source and destination folders.
----
+
 Developed by Michael Ribeiro
 ---
-pt-BR:
+## pt-BR:
 Um software de backup automático desenvolvido em Java. Seu objetivo é realizar cópias de segurança de pastas específicas uma vez por mês, de forma prática e eficiente, sem intervenção manual.
 A aplicação foi projetada para executar localmente, ideal para quem deseja garantir a preservação de arquivos importantes de maneira automatizada.
 
