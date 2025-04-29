@@ -54,9 +54,9 @@ Or, if you have already generated the `.exe` with Launch4j, just run the `.exe` 
 - Make sure that the configured source folders exist on the system.
 
 ## Future Improvements
-[] Perform 2 backups monthly.
-[] Automatic compression of backups (ZIP).
-[] Create a user-friendly interface for configuring source and destination folders.
+- [] Perform 2 backups monthly.
+- [] Automatic compression of backups (ZIP).
+- [] Create a user-friendly interface for configuring source and destination folders.
 
 Developed by Michael Ribeiro
 ---
@@ -116,8 +116,8 @@ Ou, se já tiver gerado o `.exe` com Launch4j, basta executar o `.exe` normalmen
 - Certifique-se de que as pastas de origem configuradas existam no sistema.
 
 ## Melhorias Futuras
-[] Realizar 2 backups mensalmente.
-[] Compressão automática dos backups (ZIP).
-[] Criar interface amigável para configurar pastas de origem e destino.
+- [] Realizar 2 backups mensalmente.
+- [] Compressão automática dos backups (ZIP).
+- [] Criar interface amigável para configurar pastas de origem e destino.
 ---
 Desenvolvido por Michael Ribeiro
