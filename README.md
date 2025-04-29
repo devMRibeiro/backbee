@@ -58,7 +58,8 @@ Or, if you have already generated the `.exe` with Launch4j, just run the `.exe` 
 - [] Automatic compression of backups (ZIP).
 - [] Create a user-friendly interface for configuring source and destination folders.
 
-Developed by Michael Ribeiro
+##### Developed by Michael Ribeiro
+
 ---
 ## pt-BR:
 Um software de backup automático desenvolvido em Java. Seu objetivo é realizar cópias de segurança de pastas específicas uma vez por mês, de forma prática e eficiente, sem intervenção manual.
