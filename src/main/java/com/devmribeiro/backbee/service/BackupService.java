@@ -58,10 +58,9 @@ public class BackupService {
 	}
 	
 	private String getTimeExec(long start, long diffMs) {
-		long ms = diffMs - start;
-		long seconds = (ms / 1000) % 60;
-		long minutes = (ms / 60000) % 60;
-		return String.format("%02d:%02d:%03d", minutes, seconds, ms);
+		long seconds = (diffMs / 1000) % 60;
+		long minutes = (diffMs / 60000) % 60;
+		return String.format("%02d:%02d:%03d", minutes, seconds, diffMs);
 	}
 
 	private boolean copy(Path source, Path target) {
