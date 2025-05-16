@@ -1,9 +1,9 @@
 package com.devmribeiro.backbee.app;
 
-import com.devmribeiro.backbee.service.BackupService;
+import com.devmribeiro.backbee.impl.BackbeeImpl;
 
 public class BackbeeApplication {
 	public static void main(String[] args) {
-		new BackupService().backup();
+		new BackbeeImpl().backup();
 	}
 }
