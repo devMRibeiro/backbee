@@ -1,4 +1,4 @@
-package com.devmribeiro.backbee.service;
+package com.devmribeiro.backbee.impl;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -14,7 +14,7 @@ public class Copy extends SimpleFileVisitor<Path> {
 
 	private static final Logger log = Logger.getLogger(Copy.class);
 
-	private long count = 0l;
+	private long count = 0;
 
     private Path sourceDir;
     private Path targetDir;
