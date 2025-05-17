@@ -14,12 +14,12 @@ import com.devmribeiro.backbee.util.BackbeeUtil;
 public class BackbeeImpl {
 	
 	private long count = 0;
-//	private static final String[] FOLDER_TO_BACKUP = {
-//		"Desktop", "Documents", "Downloads", "Pictures", "Videos"
-//	};
-	private final String[] FOLDER_TO_BACKUP = {
-		"Pictures", "Videos"
+	private static final String[] FOLDER_TO_BACKUP = {
+		"Desktop", "Documents", "Downloads", "Pictures", "Videos"
 	};
+//	private final String[] FOLDER_TO_BACKUP = {
+//		"Pictures", "Videos"
+//	};
 
 	public void backup() {
 		
@@ -66,7 +66,7 @@ public class BackbeeImpl {
 			Log.i("---------------------------" + source + "---------------------------");
 			Copy copy = new Copy(source, target);
 			Files.walkFileTree(source, copy);
-			count = copy.getCount();
+			count += copy.getCount();
 			Log.i("--------------------------------END--------------------------------\n");
         	return true;
 
@@ -89,10 +89,12 @@ public class BackbeeImpl {
 
 		for (int i = 0; i < backups.length; i++) {
 			File dir = backups[i];
-			if (dir.getName().equals(oldBackupName))
+			if (dir.getName().equals(oldBackupName)) {
 				deleteFolder(dir);
+				return true;
+			}
 		}
-		return true;
+		return false;
 	}
 
 	private void deleteFolder(File dir) {
