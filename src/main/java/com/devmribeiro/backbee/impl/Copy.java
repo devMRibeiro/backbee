@@ -8,11 +8,9 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import com.github.devmribeiro.zenlog.impl.Logger;
+import com.devmribeiro.backbee.log.Log;
 
 public class Copy extends SimpleFileVisitor<Path> {
-
-	private static final Logger log = Logger.getLogger(Copy.class);
 
 	private long count = 0;
 
@@ -29,10 +27,10 @@ public class Copy extends SimpleFileVisitor<Path> {
         try {
             Path targetFile = targetDir.resolve(sourceDir.relativize(file));
             Files.copy(file, targetFile, LinkOption.NOFOLLOW_LINKS);
-            log.i("copying -> " + file);
+            Log.i("copying -> " + file);
             count += 1;
         } catch (IOException ex) {
-            log.e("Error copying" + ex);
+            Log.e("Error copying" + ex);
         }
         return FileVisitResult.CONTINUE;
     }
@@ -49,7 +47,7 @@ public class Copy extends SimpleFileVisitor<Path> {
             Path newDir = targetDir.resolve(sourceDir.relativize(dir));
             Files.createDirectories(newDir);
         } catch (IOException ex) {
-            log.e("Error creating directory" + ex);
+            Log.e("Error creating directory" + ex);
         }
         return FileVisitResult.CONTINUE;
     }
