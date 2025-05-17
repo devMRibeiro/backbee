@@ -66,6 +66,6 @@ public class BackbeeUtil {
 	public static String getTimeExec(long start, long diffMs) {
 		long seconds = (diffMs / 1000) % 60;
 		long minutes = (diffMs / 60000) % 60;
-		return String.format("%02d:%02d:%03d", minutes, seconds, diffMs);
+		return minutes != 0 ? String.format("%02dm %02ds", minutes, seconds) : String.format("%02ds", seconds);
 	}
 }
