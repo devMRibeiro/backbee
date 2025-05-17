@@ -11,6 +11,7 @@ import com.db.utility.impl.ResUtil;
 import com.devmribeiro.backbee.model.BackupModel;
 import com.github.devmribeiro.zenlog.impl.Logger;
 
+@Deprecated
 public class BackupDao {
 	
 	private static final Logger log = Logger.getLogger(BackupDao.class);
