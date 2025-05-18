@@ -7,12 +7,6 @@
   <description>A automatic software backup</description>
   
   <dependencies>
-  	<dependency>
-		<groupId>org.postgresql</groupId>
-		<artifactId>postgresql</artifactId>
-		<version>42.6.0</version>
-	</dependency>
-	
 	<dependency>
     	<groupId>com.github.devMRibeiro</groupId>
     	<artifactId>db-connection-manager</artifactId>

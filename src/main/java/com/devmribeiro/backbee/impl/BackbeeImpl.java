@@ -31,7 +31,7 @@ public class BackbeeImpl {
 		if (BackbeeUtil.hasBackupCurrentMonth() == null || BackbeeUtil.hasBackupCurrentMonth())
 			return;
 		
-		File backupTarget = new File("E:/backbee/backups/TESTEbackup_" + YearMonth.now().toString().replace("-", "_"));
+		File backupTarget = new File("E:/backbee/backups/backup_" + YearMonth.now().toString().replace("-", "_"));
 
 		if (removeOldBackup(backupTarget))
 			Log.i("Old backup deleted");
