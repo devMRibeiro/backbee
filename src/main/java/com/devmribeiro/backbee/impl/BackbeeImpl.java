@@ -17,7 +17,7 @@ public class BackbeeImpl {
 	private static final String[] FOLDER_TO_BACKUP = {
 		"Desktop", "Documents", "Downloads", "Pictures", "Videos"
 	};
-//	private final String[] FOLDER_TO_BACKUP = {
+//	private final String[] FOLDER_TO_BACKUP = { // test
 //		"Pictures", "Videos"
 //	};
 
@@ -81,7 +81,7 @@ public class BackbeeImpl {
 	private boolean removeOldBackup(File target) {
 		File backupDir = target.getParentFile();
 
-		String oldBackupName = "backup_" + YearMonth.now().minusMonths(3).toString().replace("-", "_");
+		String oldBackupName = "backup_" + YearMonth.now().minusMonths(2).toString().replace("-", "_");
 
 		File[] backups = backupDir.listFiles();
 
