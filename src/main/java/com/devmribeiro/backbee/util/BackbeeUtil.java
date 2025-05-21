@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 import com.devmribeiro.backbee.log.Log;
@@ -42,12 +43,16 @@ public class BackbeeUtil {
 			return null;
 		}
 
-		String lastBkp = props.getProperty("last-backup");
+		String lastBackup = props.getProperty("last-backup");
 
-		if (lastBkp == null || lastBkp.isBlank())
+		if (lastBackup == null || lastBackup.isBlank())
 			return false;
 
-		return lastBkp.equals(String.valueOf(LocalDate.now()));
+		LocalDate lastBackupDate = LocalDate.parse(lastBackup, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		LocalDate now = LocalDate.now();
+
+		return lastBackupDate.getYear() == now.getYear() &&
+		       lastBackupDate.getMonth() == now.getMonth();
 	}
 
 	public static boolean udpatePropertiesFile() {
