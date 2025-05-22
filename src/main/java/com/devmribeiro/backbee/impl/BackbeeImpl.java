@@ -6,6 +6,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import com.devmribeiro.backbee.log.Log;
@@ -31,7 +32,7 @@ public class BackbeeImpl {
 		if (BackbeeUtil.hasBackupCurrentMonth() == null || BackbeeUtil.hasBackupCurrentMonth())
 			return;
 		
-		File backupTarget = new File("E:/backbee/backups/backup_" + YearMonth.now().toString().replace("-", "_"));
+		File backupTarget = new File("E:/backbee/backups/backup-" + LocalDate.now());
 
 		if (removeOldBackup(backupTarget))
 			Log.i("Old backup deleted");
