@@ -49,18 +49,30 @@ public class BackbeeUtil {
 			return false;
 
 		LocalDate lastBackupDate = LocalDate.parse(lastBackup, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
 		LocalDate now = LocalDate.now();
 
-		return lastBackupDate.getYear() == now.getYear() &&
-		       lastBackupDate.getMonth() == now.getMonth();
-	}
+		if (lastBackupDate.getYear() != now.getYear() || lastBackupDate.getMonthValue() != now.getMonthValue())
+			return false;
 
+		if (now.getDayOfMonth() <= 15 && lastBackupDate.isBefore(now.withDayOfMonth(1)))
+			return false;
+
+		if (now.getDayOfMonth() > 15 && lastBackupDate.getDayOfMonth() <= 15)
+			return false;
+
+		return true;
+	}
+	
 	public static boolean udpatePropertiesFile() {
 		try {
 			Properties props = new Properties();
 			props.load(new FileInputStream(PROPERTIES_FILE.toFile()));
-			props.setProperty("last-backup", String.valueOf(LocalDate.now()));
-			props.store(new FileOutputStream(PROPERTIES_FILE.toFile()), "Do not modify or delete this file. Application may result in failure.");
+			
+			props.setProperty("date-first-backup-of-the-month", LocalDate.now().getDayOfMonth() <= 15 ? String.valueOf(LocalDate.now()) : null);
+			props.setProperty("date-second-backup-of-the-month", LocalDate.now().getDayOfMonth() > 15 ? String.valueOf(LocalDate.now()) : null);
+
+			props.store(new FileOutputStream("src/main/resources/bb.properties"), "Do not modify or delete this file. Application may result in failure.");
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
