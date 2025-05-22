@@ -72,7 +72,7 @@ public class BackbeeUtil {
 			props.setProperty("date-first-backup-of-the-month", LocalDate.now().getDayOfMonth() <= 15 ? String.valueOf(LocalDate.now()) : "");
 			props.setProperty("date-second-backup-of-the-month", LocalDate.now().getDayOfMonth() > 15 ? String.valueOf(LocalDate.now()) : "");
 
-			props.store(new FileOutputStream("teste.properties"), "Do not modify or delete this file. Application may result in failure.");
+			props.store(new FileOutputStream(PROPERTIES_FILE.toString()), "Do not modify or delete this file. Application may result in failure.");
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
