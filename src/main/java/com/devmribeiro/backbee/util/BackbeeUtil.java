@@ -63,23 +63,23 @@ public class BackbeeUtil {
 
 		return true;
 	}
-	
+
 	public static boolean udpatePropertiesFile() {
 		try {
 			Properties props = new Properties();
 			props.load(new FileInputStream(PROPERTIES_FILE.toFile()));
-			
-			props.setProperty("date-first-backup-of-the-month", LocalDate.now().getDayOfMonth() <= 15 ? String.valueOf(LocalDate.now()) : null);
-			props.setProperty("date-second-backup-of-the-month", LocalDate.now().getDayOfMonth() > 15 ? String.valueOf(LocalDate.now()) : null);
 
-			props.store(new FileOutputStream("src/main/resources/bb.properties"), "Do not modify or delete this file. Application may result in failure.");
+			props.setProperty("date-first-backup-of-the-month", LocalDate.now().getDayOfMonth() <= 15 ? String.valueOf(LocalDate.now()) : "");
+			props.setProperty("date-second-backup-of-the-month", LocalDate.now().getDayOfMonth() > 15 ? String.valueOf(LocalDate.now()) : "");
+
+			props.store(new FileOutputStream("teste.properties"), "Do not modify or delete this file. Application may result in failure.");
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
-	
+
 	public static String getTimeExec(long start, long diffMs) {
 		long seconds = (diffMs / 1000) % 60;
 		long minutes = (diffMs / 60000) % 60;

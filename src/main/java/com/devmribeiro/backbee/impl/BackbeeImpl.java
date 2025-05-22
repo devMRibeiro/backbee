@@ -38,6 +38,7 @@ public class BackbeeImpl {
 			Log.i("Old backup deleted");
 
 		boolean isSuccess = true;
+
 		for (String folder : FOLDER_TO_BACKUP) {
 			Path source = Paths.get(BackbeeUtil.USER_HOME + "/" + folder);
 			Path target = Paths.get(backupTarget + "/" + folder);
