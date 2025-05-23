@@ -7,7 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.devmribeiro.backbee.log.Log;
 import com.devmribeiro.backbee.util.BackbeeUtil;
@@ -34,8 +37,7 @@ public class BackbeeImpl {
 		
 		File backupTarget = new File("E:/backbee/backups/backup-" + LocalDate.now());
 
-		if (removeOldBackup(backupTarget))
-			Log.i("Old backup deleted");
+		removeOldBackups(backupTarget);
 
 		boolean isSuccess = true;
 
@@ -80,23 +82,60 @@ public class BackbeeImpl {
 		return false;
 	}
 
-	private boolean removeOldBackup(File target) {
-		File backupDir = target.getParentFile();
+	private void removeOldBackups(File target) {
+	    File backupDir = target.getParentFile();
+	    File[] backups = backupDir.listFiles();
 
-		String oldBackupName = "backup_" + YearMonth.now().minusMonths(2).toString().replace("-", "_");
+	    if (backups == null) return;
 
-		File[] backups = backupDir.listFiles();
+	    while (true) {
+	        List<File> validBackups = new ArrayList<File>();
 
-		if (backups == null) return false;
+	        for (int i = 0; i < backups.length; i++) {
 
-		for (int i = 0; i < backups.length; i++) {
-			File dir = backups[i];
-			if (dir.getName().equals(oldBackupName)) {
-				deleteFolder(dir);
-				return true;
-			}
-		}
-		return false;
+	        	File dir = backups[i];
+
+	            if (dir.isDirectory() && dir.getName().startsWith("backup-")) {
+	                LocalDate date = getDateByNameFile(dir.getName());
+
+	                if (date != null)
+	                    validBackups.add(dir);
+	            }
+	        }
+
+	        if (validBackups.size() <= 3) break;
+
+	        File oldest = validBackups.get(0);
+	        LocalDate oldestDate = getDateByNameFile(oldest.getName());
+
+	        for (int i = 1; i < validBackups.size(); i++) {
+	            File current = validBackups.get(i);
+	            LocalDate currentDate = getDateByNameFile(current.getName());
+
+	            if (currentDate != null && currentDate.isBefore(oldestDate)) {
+	                oldest = current;
+	                oldestDate = currentDate;
+	            }
+	        }
+
+	        deleteFolder(oldest);
+	        Log.i("Old backup deleted");
+
+	        backups = backupDir.listFiles();
+	        if (backups == null) break;
+	    }
+	}
+
+	private LocalDate getDateByNameFile(String name) {
+	    try {
+	        String[] parts = name.split("backup-");
+	        if (parts.length == 2) {
+	            return LocalDate.parse(parts[1], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	        }
+	    } catch (DateTimeParseException e) {
+	        Log.e("Failed to parse backup folder date: " + name, e);
+	    }
+	    return null;
 	}
 
 	private void deleteFolder(File dir) {
