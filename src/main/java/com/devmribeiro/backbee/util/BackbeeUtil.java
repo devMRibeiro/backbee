@@ -1,5 +1,6 @@
 package com.devmribeiro.backbee.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,6 +9,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import com.devmribeiro.backbee.log.Log;
@@ -16,6 +20,7 @@ public class BackbeeUtil {
 	public static final String USER_HOME = System.getProperty("user.home");
 	public static final Path BASE_FOLDER = Paths.get(USER_HOME, "backbee");
 	public static final Path PROPERTIES_FILE = Paths.get(BASE_FOLDER.toString(), "bb.properties");
+	public static final String KEY_LAST_BACKUP = "last-backup";
 
 	public static boolean createDirectoryAndFile() {
 		try {
@@ -43,7 +48,7 @@ public class BackbeeUtil {
 			return null;
 		}
 
-		String lastBackup = props.getProperty("last-backup");
+		String lastBackup = props.getProperty(KEY_LAST_BACKUP);
 
 		if (lastBackup == null || lastBackup.isBlank())
 			return false;
@@ -69,8 +74,7 @@ public class BackbeeUtil {
 			Properties props = new Properties();
 			props.load(new FileInputStream(PROPERTIES_FILE.toFile()));
 
-			props.setProperty("date-first-backup-of-the-month", LocalDate.now().getDayOfMonth() <= 15 ? String.valueOf(LocalDate.now()) : "");
-			props.setProperty("date-second-backup-of-the-month", LocalDate.now().getDayOfMonth() > 15 ? String.valueOf(LocalDate.now()) : "");
+			props.setProperty(KEY_LAST_BACKUP, LocalDate.now().toString());
 
 			props.store(new FileOutputStream(PROPERTIES_FILE.toString()), "Do not modify or delete this file. Application may result in failure.");
 			return true;
@@ -80,6 +84,72 @@ public class BackbeeUtil {
 		}
 	}
 
+	public static void removeOldBackups(File target) {
+	    File backupDir = target.getParentFile();
+	    File[] backups = backupDir.listFiles();
+
+	    if (backups == null) return;
+
+	    while (true) {
+	        List<File> validBackups = new ArrayList<File>();
+
+	        for (int i = 0; i < backups.length; i++) {
+
+	        	File dir = backups[i];
+
+	            if (dir.isDirectory() && dir.getName().startsWith("backup-")) {
+	                LocalDate date = getDateByNameFile(dir.getName());
+
+	                if (date != null)
+	                    validBackups.add(dir);
+	            }
+	        }
+
+	        if (validBackups.size() <= 3) break;
+
+	        File oldest = validBackups.get(0);
+	        LocalDate oldestDate = getDateByNameFile(oldest.getName());
+
+	        for (int i = 1; i < validBackups.size(); i++) {
+	            File current = validBackups.get(i);
+	            LocalDate currentDate = getDateByNameFile(current.getName());
+
+	            if (currentDate != null && currentDate.isBefore(oldestDate)) {
+	                oldest = current;
+	                oldestDate = currentDate;
+	            }
+	        }
+
+	        deleteFolder(oldest);
+	        Log.i("Old backup deleted");
+
+	        backups = backupDir.listFiles();
+	        if (backups == null) break;
+	    }
+	}
+
+	private static void deleteFolder(File dir) {
+		if (dir.isDirectory()) {
+			File[] children = dir.listFiles();
+			if (children != null)
+				for (int i = 0; i < children.length; i++)
+					deleteFolder(children[i]);
+		}
+		dir.delete();
+	}
+
+	private static LocalDate getDateByNameFile(String filename) {
+	    try {
+	        String[] parts = filename.split("backup-");
+	        if (parts.length == 2) {
+	            return LocalDate.parse(parts[1], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	        }
+	    } catch (DateTimeParseException e) {
+	        Log.e("Failed to parse backup folder date: " + filename, e);
+	    }
+	    return null;
+	}
+	
 	public static String getTimeExec(long start, long diffMs) {
 		long seconds = (diffMs / 1000) % 60;
 		long minutes = (diffMs / 60000) % 60;
