@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
@@ -105,27 +106,24 @@ public class BackbeeUtil {
 	            }
 	        }
 
-	        if (validBackups.size() <= 3) break;
+	        // Order from oldest to newest
+	        validBackups.sort(Comparator.comparing(f -> getDateByNameFile(f.getName())));
 
-	        File oldest = validBackups.get(0);
-	        LocalDate oldestDate = getDateByNameFile(oldest.getName());
-
-	        for (int i = 1; i < validBackups.size(); i++) {
-	            File current = validBackups.get(i);
-	            LocalDate currentDate = getDateByNameFile(current.getName());
-
-	            if (currentDate != null && currentDate.isBefore(oldestDate)) {
-	                oldest = current;
-	                oldestDate = currentDate;
-	            }
+	        while (validBackups.size() > 3) {
+	            File oldest = validBackups.remove(0);
+	            deleteFolder(oldest);
+	            Log.i("Old backup deleted: " + oldest.getName());
 	        }
-
-	        deleteFolder(oldest);
-	        Log.i("Old backup deleted");
-
-	        backups = backupDir.listFiles();
-	        if (backups == null) break;
 	    }
+	}
+	
+	public static void main(String[] args) {
+		List<Integer> list = new ArrayList<Integer>();
+		
+		list.add(1);
+		list.add(2);
+		list.add(3);
+		list.add(4);
 	}
 
 	private static void deleteFolder(File dir) {
@@ -141,9 +139,9 @@ public class BackbeeUtil {
 	private static LocalDate getDateByNameFile(String filename) {
 	    try {
 	        String[] parts = filename.split("backup-");
-	        if (parts.length == 2) {
+	        if (parts.length == 2)
 	            return LocalDate.parse(parts[1], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-	        }
+
 	    } catch (DateTimeParseException e) {
 	        Log.e("Failed to parse backup folder date: " + filename, e);
 	    }
