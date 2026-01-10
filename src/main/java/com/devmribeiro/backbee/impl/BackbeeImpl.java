@@ -22,16 +22,20 @@ public class BackbeeImpl {
 //	};
 
 	public void backup() {
-		
+
 		long start = System.currentTimeMillis();
 
 		if (!BackbeeUtil.createDirectoryAndFile())
 			return;
 
-		if (BackbeeUtil.hasBackupCurrentMonth() == null || BackbeeUtil.hasBackupCurrentMonth())
+		Boolean hasBackupCurrentMonth = BackbeeUtil.hasBackupCurrentMonth(); 
+
+		if (hasBackupCurrentMonth == null || hasBackupCurrentMonth)
 			return;
-		
+
 		File backupTarget = new File("E:/backbee/backups/backup-" + LocalDate.now());
+
+		Log.i("Backup started");
 
 		BackbeeUtil.removeOldBackups(backupTarget);
 
