@@ -89,32 +89,31 @@ public class BackbeeUtil {
 	    File backupDir = target.getParentFile();
 	    File[] backups = backupDir.listFiles();
 
-	    if (backups == null) return;
+	    if (backups == null)
+	    	return;
 
-	    while (true) {
-	        List<File> validBackups = new ArrayList<File>();
+        List<File> validBackups = new ArrayList<File>();
 
-	        for (int i = 0; i < backups.length; i++) {
+        for (int i = 0; i < backups.length; i++) {
 
-	        	File dir = backups[i];
+        	File dir = backups[i];
 
-	            if (dir.isDirectory() && dir.getName().startsWith("backup-")) {
-	                LocalDate date = getDateByNameFile(dir.getName());
+            if (dir.isDirectory() && dir.getName().startsWith("backup-")) {
+                LocalDate date = getDateByNameFile(dir.getName());
 
-	                if (date != null)
-	                    validBackups.add(dir);
-	            }
-	        }
+                if (date != null)
+                    validBackups.add(dir);
+            }
+        }
 
-	        // Order from oldest to newest
-	        validBackups.sort(Comparator.comparing(f -> getDateByNameFile(f.getName())));
+        // Order from oldest to newest
+        validBackups.sort(Comparator.comparing(f -> getDateByNameFile(f.getName())));
 
-	        while (validBackups.size() > 3) {
-	            File oldest = validBackups.remove(0);
-	            deleteFolder(oldest);
-	            Log.i("Old backup deleted: " + oldest.getName());
-	        }
-	    }
+        while (validBackups.size() > 2) {
+            File oldest = validBackups.remove(0);
+            deleteFolder(oldest);
+            Log.i("Old backup deleted: " + oldest.getName());
+        }
 	}
 	
 	public static void main(String[] args) {
