@@ -23,6 +23,8 @@ public class BackbeeImpl {
 
 	public void backup() {
 
+		Log.i("Backup started");
+
 		long start = System.currentTimeMillis();
 
 		if (!BackbeeUtil.createDirectoryAndFile())
@@ -30,12 +32,12 @@ public class BackbeeImpl {
 
 		Boolean hasBackupCurrentMonth = BackbeeUtil.hasBackupCurrentMonth(); 
 
-		if (hasBackupCurrentMonth == null || hasBackupCurrentMonth)
+		if (hasBackupCurrentMonth == null || hasBackupCurrentMonth) {
+			Log.i("A backup already exists for the current period.");
 			return;
+		}
 
 		File backupTarget = new File("E:/backbee/backups/backup-" + LocalDate.now());
-
-		Log.i("Backup started");
 
 		BackbeeUtil.removeOldBackups(backupTarget);
 

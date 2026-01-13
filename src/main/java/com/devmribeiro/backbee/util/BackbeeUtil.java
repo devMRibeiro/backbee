@@ -109,7 +109,7 @@ public class BackbeeUtil {
         // Order from oldest to newest
         validBackups.sort(Comparator.comparing(f -> getDateByNameFile(f.getName())));
 
-        while (validBackups.size() > 2) {
+        while (validBackups.size() > 3) {
             File oldest = validBackups.remove(0);
             deleteFolder(oldest);
             Log.i("Old backup deleted: " + oldest.getName());
