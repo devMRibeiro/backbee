@@ -1,4 +1,4 @@
-package com.devmribeiro.backbee.util;
+package com.devmribeiro.backbee.deprecated.util;
 
 import java.io.File;
 import java.io.FileInputStream;

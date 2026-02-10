@@ -1,4 +1,4 @@
-package com.devmribeiro.backbee.impl;
+package com.devmribeiro.backbee.deprecated.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,8 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 
+import com.devmribeiro.backbee.deprecated.util.BackbeeUtil;
 import com.devmribeiro.backbee.log.Log;
-import com.devmribeiro.backbee.util.BackbeeUtil;
 
 public class BackbeeImpl {
 	
