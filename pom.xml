@@ -8,12 +8,6 @@
   
   <dependencies>
 	<dependency>
-    	<groupId>com.github.devMRibeiro</groupId>
-    	<artifactId>db-connection-manager</artifactId>
-    	<version>v1.5.0</version>
-	</dependency>
-	
-	<dependency>
 	    <groupId>com.github.devMRibeiro</groupId>
 	    <artifactId>zen-log</artifactId>
 	    <version>v2.3.2</version>
