@@ -4,6 +4,9 @@ import java.nio.file.Path;
 
 import com.devmribeiro.backbee.core.policy.RetentionPolicy;
 import com.devmribeiro.backbee.core.service.BackupService;
+import com.devmribeiro.backbee.core.service.contract.BackupExecutor;
+import com.devmribeiro.backbee.core.service.contract.BackupRemover;
+import com.devmribeiro.backbee.core.service.contract.BackupScanner;
 import com.devmribeiro.backbee.infrastructure.filesystem.DirectoryCopier;
 import com.devmribeiro.backbee.infrastructure.filesystem.FileSystemBackupExecutor;
 import com.devmribeiro.backbee.infrastructure.filesystem.FileSystemBackupRemover;
@@ -32,12 +35,12 @@ public class BackbeeApplication {
         // Infra
         DirectoryCopier copier = new DirectoryCopier();
 
-        FileSystemBackupScanner scanner = new FileSystemBackupScanner(config.destination());
+        BackupScanner scanner = new FileSystemBackupScanner(config.destination());
 
-        FileSystemBackupExecutor executor = new FileSystemBackupExecutor(config.destination(), config.sources(), copier);
+        BackupExecutor executor = new FileSystemBackupExecutor(config.destination(), config.sources(), copier);
 
-        FileSystemBackupRemover remover = new FileSystemBackupRemover(config.destination());
-
+        BackupRemover remover = new FileSystemBackupRemover(config.destination());
+        
         // Core
         BackupService service = new BackupService(scanner, executor, remover, new RetentionPolicy());
 
