@@ -4,43 +4,105 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 import com.devmribeiro.backbee.shared.BackupConfig;
 
 public class BackupCLIInput {
-	private final Scanner scanner = new Scanner(System.in);
 
-    public BackupConfig load() {
-        System.out.print("Pastas de origem (Exemplo: C:\\Users\\User Name\\Desktop,C:\\Users\\User Name\\Documents, etc): ");
+    private final Scanner scanner = new Scanner(System.in);
 
-        List<String> folders = Arrays.asList(scanner.nextLine().split(","));
+    public BackupConfig createConfig() {
+        return readConfig();
+    }
+
+    public BackupConfig updateConfig(BackupConfig existing) {
+
+        System.out.println("1 - Alterar pastas de origem");
+        System.out.println("2 - Alterar quantidade de backups");
+        System.out.println("3 - Alterar ambos");
+
+        String option = scanner.nextLine();
+
+        List<Path> sources = existing.sources();
+        int maxBackups = existing.maxBackups();
+
+        if (option.equals("1") || option.equals("3"))
+            sources = readSources();
+
+        if (option.equals("2") || option.equals("3"))
+            maxBackups = readMaxBackups();
+
+        return new BackupConfig(sources, existing.destination(), maxBackups);
+    }
+    
+    private BackupConfig readConfig() {
+
+        List<Path> sources = readSources();
+        Path destination = readDestination();
+        int maxBackups = readMaxBackups();
+
+        return new BackupConfig(sources, destination, maxBackups);
+    }
+
+    private List<Path> readSources() {
+
+        System.out.print("Caminho das pastas de origem (separadas por vírgula): ");
+        String input = scanner.nextLine();
+
+        String[] folders = input.split(",");
+
         List<Path> sources = new ArrayList<Path>();
 
-        for (int i = 0; i < folders.size(); i++) {
-        	String folder = folders.get(i);
-        	sources.add(Path.of(folder.trim()));
+        for (String folder : folders) {
+            Path path = Path.of(folder.trim());
+
+            if (!Files.exists(path))
+                System.out.println("Aviso: caminho não existe -> " + path);
+
+            sources.add(path);
         }
+        return sources;
+    }
 
-        System.out.print("Pasta de destino do backup (Exemplo: C:\\Users\\User Name\\Desktop\\Backup): ");
+    private Path readDestination() {
 
+        System.out.print("Caminho da pasta de destino do backup: ");
         Path original = Path.of(scanner.nextLine().trim());
 
-        // Adiciona sufixo para pasta de destino. Evita que a pasta de backup seja incluída no backup
-        Path novoCaminho = original.resolveSibling(original.getFileName().toString() + "-backbee");
+        Path renamed = original.resolveSibling(original.getFileName().toString() + "-backbee");
 
         try {
-            Files.move(original, novoCaminho);
+            if (Files.exists(original) && !Files.exists(renamed))
+                Files.move(original, renamed);
+
         } catch (IOException e) {
-            System.out.println("Erro ao renomear a pasta: " + e.getMessage());
+            System.out.println("Erro ao renomear pasta: " + e.getMessage());
         }
 
-        System.out.print("Quantidade de backup: ");
+        return renamed;
+    }
 
-        int maxBackups = Integer.parseInt(scanner.nextLine().trim());
+    private int readMaxBackups() {
 
-        return new BackupConfig(sources, novoCaminho, maxBackups);
+        while (true) {
+            System.out.print("Quantidade máxima de backups: ");
+            String input = scanner.nextLine().trim();
+
+            try {
+                int value = Integer.parseInt(input);
+
+                if (value <= 0) {
+                    System.out.println("Deve ser maior que zero.");
+                    continue;
+                }
+
+                return value;
+
+            } catch (NumberFormatException e) {
+                System.out.println("Número inválido.");
+            }
+        }
     }
 }

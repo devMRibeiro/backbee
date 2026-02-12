@@ -6,6 +6,10 @@
   <name>BackBee</name>
   <description>A automatic software backup</description>
   
+  	<properties>
+		<maven.compiler.release>17</maven.compiler.release>
+	</properties>
+
   <dependencies>
 	<dependency>
 	    <groupId>com.github.devMRibeiro</groupId>
@@ -20,4 +24,22 @@
     	<url>https://jitpack.io</url>
   	</repository>
   </repositories>
+  
+  	<build>
+	    <plugins>
+	        <plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-jar-plugin</artifactId>
+			    <version>3.3.0</version>
+			    <configuration>
+			        <archive>
+			            <manifest>
+			                <mainClass>com.devmribeiro.backbee.app.BackbeeApplication</mainClass>
+			            </manifest>
+			        </archive>
+			    </configuration>
+			</plugin>
+	    </plugins>
+	</build>
+
 </project>
